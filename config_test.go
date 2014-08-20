@@ -140,4 +140,7 @@ auth:
 	if conf.Auth.Info.ApiEndpoint != "https://api.github.com" {
 		t.Errorf("unexpected api endpoint address: %s", conf.Auth.Info.ApiEndpoint)
 	}
+	if conf.Auth.Info.Insecure {
+		t.Errorf("insecure flag should be false: %s", conf.Auth.Info.Insecure)
+	}
 }

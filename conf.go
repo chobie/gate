@@ -36,6 +36,7 @@ type AuthInfoConf struct {
 	RedirectURL  string `yaml:"redirect_url"`
 	Endpoint     string `yaml:"endpoint"`
 	ApiEndpoint  string `yaml:"api_endpoint"`
+	Insecure     bool   `yaml:"insecure"`
 }
 
 type ProxyConf struct {
@@ -50,7 +51,13 @@ func ParseConf(path string) (*Conf, error) {
 		return nil, err
 	}
 
-	c := &Conf{}
+	c := &Conf{
+		Auth: AuthConf{
+			Info: AuthInfoConf{
+				Insecure: false,
+			},
+		},
+	}
 	if err := yaml.Unmarshal(data, c); err != nil {
 		return nil, err
 	}

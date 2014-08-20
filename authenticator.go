@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strings"
 	"fmt"
+	"crypto/tls"
 )
 
 type Authenticator interface {
@@ -142,7 +143,10 @@ func (a *GitHubAuth) Authenticate(organizations []string, c martini.Context, tok
 
 		req.SetBasicAuth(tokens.Access(), "x-oauth-basic")
 
-		client := http.Client{}
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: a.conf.Auth.Info.Insecure},
+		}
+		client := http.Client{Transport: tr}
 		res, err := client.Do(req)
 		if err != nil {
 			log.Printf("failed to retrieve organizations: %s", err)
